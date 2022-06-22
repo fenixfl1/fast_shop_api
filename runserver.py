@@ -6,8 +6,6 @@ import os
 setting_module = os.getenv('APP_SETTINGS_MODULE')
 app = create_app(setting_module)
 
-print(f' * Running as {setting_module}')
-
 with app.app_context():
     init_db()
 

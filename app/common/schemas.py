@@ -1,5 +1,5 @@
 from app.extensions import ma
-from app.common.models import Categories, Products, User
+from app.database.models import Categories, Products, User
 from marshmallow import fields
 
 category_url = 'api_bp.categories'
@@ -42,8 +42,6 @@ class ProductSchema(ma.SQLAlchemySchema):
             "collection": ma.URLFor(category_url),
         }
     )
-
-# user schema with ma.SQLAlchemySchema
 
 
 class UserSchema(ma.SQLAlchemySchema):

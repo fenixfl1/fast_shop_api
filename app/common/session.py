@@ -1,7 +1,7 @@
 from flask import current_app, jsonify, Response
 from flask_jwt_extended import create_access_token
 from flask_principal import identity_changed, Identity
-from app.common.models import User
+from app.database.models import User
 
 
 def get_access_token(user: User) -> Response:

@@ -1,5 +1,5 @@
 from app.common.utils import CustomException
-from app.common.models import User
+from app.database.models import User
 from flask_jwt_extended import create_access_token
 
 
@@ -20,16 +20,20 @@ class UserControllers(object):
 
     @staticmethod
     def create_user(**kwargs: dict) -> User | None:
-        users = User.get_all()
+        try:
+            users = User.get_all()
 
-        for user in users:
-            if user.username == kwargs['USERNAME']:
-                raise CustomException('Username already exists', code=406)
-            elif user.email == kwargs['EMAIL']:
-                raise CustomException('Email already exists', code=406)
+            for user in users:
+                if user.username == kwargs['USERNAME']:
+                    raise CustomException('Username already exists', code=406)
+                elif user.email == kwargs['EMAIL']:
+                    raise CustomException('Email already exists', code=406)
 
-        user = User(**kwargs)
-        user.set_password(kwargs['PASSWORD'])
-        user.commit()
+            user = User(**kwargs)
+            user.id = len(users) + 1
+            user.set_password(kwargs['PASSWORD'])
+            user.commit()
 
-        return user
+            return user
+        except CustomException as e:
+            raise CustomException(f'{e.message}', code=406)

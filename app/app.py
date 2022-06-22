@@ -6,12 +6,10 @@ from .resources import api_bp
 def create_app(setting_module: str | None) -> Flask:
     app = Flask(__name__, instance_relative_config=True)
 
-    api.init_app(app)
     cors.init_app(app)
     jwt.init_app(app)
     mi.init_app(app)
     principal.init_app(app)
-    sql.init_app(app)
     ma.init_app(app)
 
     app.config.from_object(setting_module)

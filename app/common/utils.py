@@ -1,6 +1,6 @@
 import json
 from flask import Response
-from .connection import db
+from app.database import db
 
 
 class ModelMixing(object):

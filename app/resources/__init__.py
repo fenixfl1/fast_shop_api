@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restful import Api
 
-from app.resources.products import Products
+from app.resources.products import Products, Product
 from app.resources.user import LoginUser, Users
 from .categories import Categories
 from app.common.routes import *
@@ -10,6 +10,7 @@ api_bp = Blueprint('api_bp', __name__)
 api = Api(api_bp, catch_all_404s=True)
 
 
+api.add_resource(Product, '/product/filtered')
 api.add_resource(Products, GET_PRODUCTS_LIST_PATH,
                  f'{GET_PRODUCTS_LIST_PATH}/add_products', endpoint='products')
 api.add_resource(Categories, GET_CATEGORIES_PATH,
