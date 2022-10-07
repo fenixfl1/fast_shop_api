@@ -1,7 +1,17 @@
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
-from config.default import SQLALCHEMY_DATABASE_URI
+from config.default import ENV
+
+
+if ENV == 'development':
+    from config.develop import *
+elif ENV == 'testing':
+    from config.testing import *
+elif ENV == 'production':
+    from config.production import *
+else:
+    raise Exception(f'Unknown environment "{ENV}"')
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URI,

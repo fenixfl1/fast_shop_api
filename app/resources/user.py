@@ -1,9 +1,10 @@
+from datetime import datetime, timedelta
 import json
 from flask import Response, jsonify, request
 from flask_restful import Resource
 from app.database.models import User
 from app.common.schemas import UserSchema
-from app.common.utils import CustomException, eval_request
+from app.common.utils import CustomException
 from app.common.session import get_access_token
 from app.controllers import authenticate, create_user
 from flask_jwt_extended import get_jwt_identity
@@ -57,8 +58,11 @@ class LoginUser(Resource):
             return jsonify({'message': validator.errors, 'status': 400})
         else:
             try:
+                expires = datetime.now() + timedelta(days=1)
+                if data.get('REMEMBER_ME'):
+                    expires = datetime.now() + timedelta(days=30)
                 user = authenticate(data.get('USERNAME'), data.get('PASSWORD'))
 
-                return get_access_token(user)
+                return get_access_token(user, expires)
             except CustomException as e:
                 return jsonify({'message': e.message, 'status': e.status_code})

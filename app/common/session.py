@@ -4,7 +4,7 @@ from flask_principal import identity_changed, Identity
 from app.database.models import User
 
 
-def get_access_token(user: User) -> Response:
+def get_access_token(user: User, expire=0) -> Response:
     access_token = create_access_token(
         identity=user.id, expires_delta=False)
 
@@ -15,9 +15,10 @@ def get_access_token(user: User) -> Response:
         'data': {
             'username': user.first_name,
             'userId': user.id,
+            'name': f'{user.first_name} {user.last_name}',
             'sessionCookie': {
                 'token': f'Bearer {access_token}',
-                'expiration': f'{0}'
+                'expires': f'{expire}'
             }
         },
         'message': f'Wellcome {user.first_name} {user.last_name}'

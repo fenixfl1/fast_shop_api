@@ -15,10 +15,10 @@ def create_app(setting_module: str | None) -> Flask:
     app.config.from_object(setting_module)
     app.url_map.strict_slashes = False
 
-    if app.config.get('TESTING', True):
+    if app.config.get('TESTING') is True:
         print(" * Running in testing mode")
         app.config.from_envvar('APP_TESTING_SETTINGS', silent=False)
-    elif app.config.get('DEVELOPMENT', True):
+    elif app.config.get('DEBUG') is True:
         print(" * Running in development mode")
         app.config.from_envvar('APP_DEVELOPMENT_SETTINGS', silent=False)
     else:

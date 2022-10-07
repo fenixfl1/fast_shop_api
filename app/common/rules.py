@@ -42,6 +42,10 @@ rules = dict(
         "PASSWORD": {
             "type": "string",
             "required": True
+        },
+        "REMEMBER_ME": {
+            "type": "boolean",
+            "required": False,
         }
     }
 )

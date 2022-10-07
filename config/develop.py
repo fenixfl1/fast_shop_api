@@ -1,3 +1,4 @@
 from .default import *
 
-ENV = os.getenv('FLASK_ENV')
+DEBUG = True
+SQLALCHEMY_DATABASE_URI = os.getenv('DEFAULT_DEVELOPMENT_DB')

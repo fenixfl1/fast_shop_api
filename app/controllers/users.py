@@ -1,39 +1,48 @@
 from app.common.utils import CustomException
 from app.database.models import User
 from flask_jwt_extended import create_access_token
+from app.database import engine
 
 
 class UserControllers(object):
 
     @staticmethod
     def authenticate(username: str, password: str) -> User:
-        users = User.get_all()
+        query = engine.execute(
+            f""" SELECT * FROM USERS WHERE USERNAME = '{username}' OR EMAIL = '{username}' """).first()
 
-        for user in users:
-            if username == user.username:
-                if user.check_password(password):
-                    return user
-                else:
-                    break
+        user = User.get_by_id(query[0])
+
+        if user and user.check_password(password):
+            return user
         else:
             raise CustomException('Incorrect user or password', code=400)
 
     @staticmethod
     def create_user(**kwargs: dict) -> User | None:
         try:
-            users = User.get_all()
+            username: str = kwargs.get('USERNAME')
+            email: str = kwargs.get('EMAIL')
 
-            for user in users:
-                if user.username == kwargs['USERNAME']:
+            user: User = engine.execute(f""" 
+                SELECT * FROM USERS 
+                WHERE USERNAME = '{username}'
+                AND email = '{email}' 
+            """).first()
+
+            if user:
+                if user.username == username:
                     raise CustomException('Username already exists', code=406)
-                elif user.email == kwargs['EMAIL']:
+                elif user.email == email:
                     raise CustomException('Email already exists', code=406)
+            else:
+                users = User.get_all()
+                new_user = User(**kwargs)
 
-            user = User(**kwargs)
-            user.id = len(users) + 1
-            user.set_password(kwargs['PASSWORD'])
-            user.commit()
+                new_user.id = len(users) + 1
+                new_user.set_password(kwargs['PASSWORD'])
+                new_user.commit()
 
-            return user
+            return new_user
         except CustomException as e:
             raise CustomException(f'{e.message}', code=406)

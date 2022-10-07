@@ -8,9 +8,9 @@ load_dotenv(dotenv_path)
 
 DEBUG = False
 TESTING = False
-ENV = ''
+
+ENV = os.getenv('FLASK_DEFAULT_ENV')
 
 UPLOAD_FOLDER_DEST = os.getenv('UPLOAD_FOLDER')
-SQLALCHEMY_DATABASE_URI = os.getenv('ORACLE')
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False

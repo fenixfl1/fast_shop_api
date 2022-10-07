@@ -1,5 +1,5 @@
-from .config import *
-
+from .default import *
 
 TESTING = True
-SQLALCHEMY_DATABASE_URI = 'sqlite://'
+ENV = 'testing'
+SQLALCHEMY_DATABASE_URI = os.getenv('DEFAULT_TESTING_DB')
